@@ -1,31 +1,20 @@
-import Markdown from 'react-markdown'
-import rawMarkdown from '../src/markdown/readme.md?url';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+import Highlighted from './components/Highlighted';
 import './styles.css';
+import SimpleMarkdown from './components/Simple';
 
 function App() {
-  const [markdown, setMarkdown] = useState('');
-
-  useEffect(() => {
-    async function readFile() {
-      try {
-        const response = await fetch(rawMarkdown);
-        const text = await response.text();
-
-        setMarkdown(text);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    readFile();
-  }, []);
+  const [isHighlight, setIsHighlight] = useState(true);
 
   return (
-    <main>
-      <Markdown>{markdown}</Markdown>
-    </main>
-  )
+    <div>
+      <nav>
+        <button onClick={() => setIsHighlight(!isHighlight)}>{isHighlight ? 'Simple' : 'Highlighted'}</button>
+      </nav>
+      <main>{isHighlight ? <Highlighted /> : <SimpleMarkdown />}</main>
+    </div>
+  );
 }
 
-export default App
+export default App;
